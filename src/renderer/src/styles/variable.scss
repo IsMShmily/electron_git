@@ -1,0 +1,66 @@
+// 公共变量
+$color: #fff;
+$maxWidth: 100%;
+$minWidth: 320px;
+$centerWidth: 1200px;
+$space: 15px;
+// 居中
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+// 居中
+@mixin b_center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+// 定位居中
+@mixin positioncenter() {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+@mixin a_center {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+@mixin e_center {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+// 单行文本溢出隐藏
+@mixin hidetext() {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+// 文字默认样式
+@mixin fontStyle($color: #333, $fontSize: 14px) {
+  color: $color;
+  font-size: $fontSize;
+}
+// placeholder
+@mixin placeholderColor($color: #999) {
+  &:-moz-placeholder,
+  &::-moz-placeholder,
+  &:-ms-input-placeholder,
+  &::-webkit-input-placeholder,
+  &::placeholder {
+    color: $color;
+  }
+}
+// hoverButton
+@mixin hoverButton() {
+  transition: opacity 0.15s;
+  &:hover {
+    opacity: 0.9;
+  }
+}

@@ -1,0 +1,160 @@
+@import './variable.scss';
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  height: 100%;
+  background: #fff;
+  max-width: $maxWidth;
+  min-width: $minWidth;
+  overflow-x: auto;
+  margin: 0 auto;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @include fontStyle;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  border: none;
+  outline: none;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
+}
+
+a {
+  text-decoration: none;
+  font-size: inherit;
+  color: inherit;
+
+  &:hover {
+    color: inherit;
+  }
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+input,
+textarea,
+button {
+  background: none;
+  border: none;
+  outline: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+input,
+textarea {
+  @include placeholderColor;
+}
+
+button {
+  cursor: pointer;
+  @include hoverButton;
+}
+
+input:-internal-autofill-previewed,
+input:-internal-autofill-selected {
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 99999999s !important;
+}
+
+.center {
+  width: $centerWidth;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: $centerWidth) {
+  .center {
+    width: 100%;
+    padding: 0 $space;
+  }
+}
+
+.picture {
+  position: relative;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include positioncenter;
+  }
+}
+
+.iconfont {
+  @include fontStyle(inherit, inherit);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  @extend .flex;
+  @extend .flex-row-center;
+  @extend .flex-column-center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-row-center {
+  justify-content: center;
+}
+
+.flex-row-start {
+  justify-content: flex-start;
+}
+
+.flex-row-end {
+  justify-content: flex-end;
+}
+
+.flex-row-between {
+  justify-content: space-between;
+}
+
+.flex-column-center {
+  align-items: center;
+}
+
+.flex-column-start {
+  align-items: flex-start;
+}
+
+.flex-column-end {
+  align-items: flex-end;
+}
+
+.flex-occupy {
+  flex: 1;
+}
+
+// SE
+@media screen and (min-height: 600px) {
+}
