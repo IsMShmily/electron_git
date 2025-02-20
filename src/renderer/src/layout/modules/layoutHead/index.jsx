@@ -5,7 +5,10 @@ const { Header } = Layout
 const GlobalHead = () => {
   return (
     <Header className={styles.head}>
-      <div className={styles.head__main}>1312321</div>
+      <div className={styles.head__main}>
+        
+        
+      </div>
     </Header>
   )
 }

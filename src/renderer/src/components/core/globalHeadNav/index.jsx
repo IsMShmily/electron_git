@@ -1,6 +1,6 @@
 import styles from './index.module.scss'
 import React, { useEffect, useState } from 'react'
-import { PlusOutlined, EnvironmentOutlined } from '@ant-design/icons'
+import { PlusOutlined, BranchesOutlined } from '@ant-design/icons'
 import { Flex, Tag } from 'antd'
 import { gitStore } from '../../../localStore'
 
@@ -45,7 +45,7 @@ const GlobalHeadNav = () => {
           <Tag
             key={tag}
             closable={true}
-            icon={<EnvironmentOutlined />}
+            icon={<BranchesOutlined />}
             bordered={false}
             className={styles.headNavTag}
             onClose={() => handleClose(tag)}
@@ -53,9 +53,7 @@ const GlobalHeadNav = () => {
             {tag}
           </Tag>
         ))}
-        <Tag className={styles.headNavTagPlus} icon={<PlusOutlined />} onClick={setRepoPath}>
-          Add
-        </Tag>
+        <Tag className={styles.headNavTagPlus} icon={<PlusOutlined />} onClick={setRepoPath} />
       </Flex>
     </div>
   )

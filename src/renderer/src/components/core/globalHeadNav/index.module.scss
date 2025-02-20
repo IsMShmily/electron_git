@@ -15,14 +15,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
-           font-weight: bold;
+            font-weight: bold;
+            :global(.ant-tag-close-icon) {
+                color: rgba(255, 255, 255, 0.4);
+            }
+            &:hover {
+                background-color: #2a3141;
+            }
         }
+
         .headNavTagPlus {
             border: none;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 5px;
+            background-color: transparent;
             &:hover {
                 background-color: #2a3141;
                 cursor: pointer;
