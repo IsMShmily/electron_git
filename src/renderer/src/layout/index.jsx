@@ -24,12 +24,14 @@ const GlobalLayout = () => {
               max="70%"
               style={{
                 padding: 0,
-                backgroundColor: '#23252b'
               }}
             >
               <GlobalMenu />
             </Splitter.Panel>
-            <Splitter.Panel>
+            <Splitter.Panel style={{
+                padding: 0,
+                backgroundColor: '#1c1e21'
+              }} >
               <GlobalMain />
             </Splitter.Panel>
           </Splitter>

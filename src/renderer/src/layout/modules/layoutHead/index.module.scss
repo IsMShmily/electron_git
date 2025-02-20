@@ -9,5 +9,31 @@
         width: 100%;
         height: 100%;
         background-color: #2d3037;
+        display: flex;
+
+        &__repository {
+            width: fit-content;
+            padding: 0 20px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            .title {
+                font-size: 11px;
+                color: #ccc;
+                margin-bottom: 3px;
+            }
+            .caretDown{
+                font-size: 11px;
+            }
+            span {
+                font-weight: bold;
+            }
+            &:hover {
+                background-color: #26282d;
+            }
+        }
     }
 }
