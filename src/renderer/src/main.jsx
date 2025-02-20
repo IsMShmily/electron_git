@@ -12,12 +12,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#D44459',
-            borderRadius: 2
+            colorPrimary: '#282a30',
+            borderRadius: 2,
+            colorBgContainer: '#3b3f48',
+            colorText: '#fff'
           },
           components: {
             Layout: {
-              siderBg: '#fff'
+              siderBg: '#282a30'
             }
           }
         }}

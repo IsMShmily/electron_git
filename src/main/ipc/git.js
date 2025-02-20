@@ -2,9 +2,21 @@
 import { execSync } from 'child_process'
 import { ipcMain } from 'electron'
 
+// /Users/shmily/Documents/my/github/syGit
+
+/**
+ * 获取git日志
+ * @param {*} repoPath
+ * @returns
+ */
 export const getGitLog = (repoPath) => {
-  const log = execSync(`git -C ${repoPath} log --pretty=format:"%h|%s|%an|%ad" --date=iso`)
-  return log
+  /**
+   * execSync 执行一个脚本代码 返回的是 buffer 对象
+   * 需要通过 toString转换
+   * /Users/shmily/Documents/my/github/syGit
+   */
+  const logs = execSync(`git -C ${repoPath} log --pretty=format:"%h|%s|%an|%ad" --date=iso`)
+  return logs
     .toString()
     .split('\n')
     .map((line) => {
@@ -13,9 +25,29 @@ export const getGitLog = (repoPath) => {
     })
 }
 
+/**
+ * 获取 git diff
+ * @param {*} repoPath
+ * @returns
+ */
+export const getDiff = (repoPath) => {
+  const diff = execSync(`git -C ${repoPath} diff --staged`).toString()
+
+  const detectChangeType = () => {
+    if (diff.includes('+feat:')) return 'feat'
+    if (diff.includes('+fix:')) return 'fix'
+    return 'chore'
+  }
+
+  return detectChangeType(diff)
+}
+
 const setupGitIPC = () => {
   ipcMain.handle('getGitLog', (event, repoPath) => {
     return getGitLog(repoPath)
+  })
+  ipcMain.handle('getDiff', (event, repoPath) => {
+    return getDiff(repoPath)
   })
 }
 

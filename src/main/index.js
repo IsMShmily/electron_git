@@ -3,11 +3,16 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { setupIPC } from './ipc'
+
+const mainWindow = null
+
 function createWindow() {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 550,
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    minWidth: 1024,
+    height: 668,
+    minHeight: 668,
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: 'hidden', // 隐藏标题栏
@@ -88,3 +93,5 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+export { mainWindow }

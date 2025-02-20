@@ -1,10 +1,16 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
 const api = {
   getGitLog: (repoPath) => {
     return ipcRenderer.invoke('getGitLog', repoPath)
+  },
+  getDiff: (repoPath) => {
+    return ipcRenderer.invoke('getDiff', repoPath)
+  },
+  chooseFolder: () => {
+    return ipcRenderer.invoke('chooseFolder')
   }
 }
 

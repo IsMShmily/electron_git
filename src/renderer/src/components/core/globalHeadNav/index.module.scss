@@ -1,0 +1,32 @@
+.headNav {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .headNavTags {
+        height: 70%;
+        // border: 1px solid red;
+        -webkit-app-region: no-drag;
+
+        .headNavTag {
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+           font-weight: bold;
+        }
+        .headNavTagPlus {
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            &:hover {
+                background-color: #2a3141;
+                cursor: pointer;
+            }
+        }
+    }
+}
