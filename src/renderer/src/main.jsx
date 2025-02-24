@@ -4,6 +4,7 @@ import App from './App'
 import { HashRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store'
+import { theme } from 'antd'
 
 import { ConfigProvider } from 'antd'
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -12,14 +13,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#282a30',
-            borderRadius: 2,
-            colorBgContainer: '#3b3f48',
-            colorText: '#fff'
+            borderRadius: 6,
+            colorLink: '#d0defc',
+            colorPrimaryTextActive: '#ffffff',
+            colorPrimary: '#ff7178'
           },
+          algorithm: theme.darkAlgorithm,
           components: {
             Layout: {
-              siderBg: '#282a30'
+              siderBg: '#282a30',
+              headerBg: '#2d3037'
             }
           }
         }}
