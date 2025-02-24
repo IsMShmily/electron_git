@@ -1,0 +1,118 @@
+.side__main {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &__headerGroup {
+        width: 100%;
+        height: calc(100% - 200px);
+        &__header {
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 12px;
+            border-bottom: 1px solid #1b1c1e;
+        }
+        &__checkboxGroup {
+            width: 100%;
+            overflow: hidden;
+
+            &__item {
+                width: 100%;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                padding: 10px 20px 10px 10px;
+                box-sizing: border-box;
+
+                &__checkbox {
+                    width: 100%;
+                }
+
+                &__text {
+                    width: 100%;
+                    height: 100%;
+                    font-size: 11px;
+                    font-weight: 500;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+
+                :global(.ant-checkbox-wrapper) {
+                    display: flex;
+                    align-items: center;
+                    span:nth-child(1) {
+                    }
+                    span:nth-child(2) {
+                    }
+                }
+            }
+        }
+    }
+
+    &__footerGroup {
+        width: 100%;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        &__inputGroup {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px 0 5px;
+            box-sizing: border-box;
+
+            :global(.ant-avatar) {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                flex-shrink: 0;
+                margin-right: 5px;
+            }
+            :global(.ant-input) {
+                width: 100%;
+                height: 100%;
+                &::placeholder {
+                    font-size: 12px;
+                }
+            }
+        }
+        &__desc {
+            width: 100%;
+            height: 100%;
+            padding: 0 8px;
+            box-sizing: border-box;
+            margin-top: 10px;
+
+            :global(.ant-input-outlined) {
+                &::placeholder {
+                    font-size: 12px;
+                }
+            }
+        }
+        &__button {
+            width: 100%;
+            height: 100%;
+            padding: 0 8px;
+            box-sizing: border-box;
+            margin-top: 10px;
+
+            :global(.ant-btn) {
+                width: 100%;
+                height: 36px;
+                border: none;
+                border-radius: 10px;
+                font-size: 12px;
+            }
+        }
+    }
+}

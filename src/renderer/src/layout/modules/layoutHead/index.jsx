@@ -1,7 +1,7 @@
 import styles from './index.module.scss'
 import { Layout } from 'antd'
-import { CaretDownOutlined } from '@ant-design/icons'
-import { Dropdown, Space } from 'antd'
+import { CaretDownOutlined, SyncOutlined } from '@ant-design/icons'
+import { Dropdown, Space, Button } from 'antd'
 const { Header } = Layout
 const items = [
   {
@@ -9,6 +9,7 @@ const items = [
     key: '1'
   }
 ]
+
 const GlobalHead = () => {
   return (
     <Header className={styles.head}>
@@ -22,6 +23,7 @@ const GlobalHead = () => {
             </Space>
           </div>
         </Dropdown>
+
         <Dropdown menu={{ items }} trigger={['click']}>
           <div onClick={(e) => e.preventDefault()} className={styles.head__main__repository}>
             <div className={styles.title}>Current Branch</div>
@@ -31,6 +33,14 @@ const GlobalHead = () => {
             </Space>
           </div>
         </Dropdown>
+
+        <div className={styles.head__main__button}>
+          <div className={styles.head__main__button__fetch}>
+            <div>Fetch origin</div>
+            <SyncOutlined className={styles.icon} />
+          </div>
+          <div className={styles.lastFetch}>Last fetched 24 minutes ago</div>
+        </div>
       </div>
     </Header>
   )

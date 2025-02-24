@@ -1,5 +1,5 @@
 import styles from './index.module.scss'
-import GlobalMenu from './modules/layoutMenu'
+import LayoutSide from './modules/layoutSide'
 import GlobalMain from './modules/layoutMain'
 import GlobalHead from './modules/layoutHead'
 import { Layout } from 'antd'
@@ -19,14 +19,14 @@ const GlobalLayout = () => {
         <Layout>
           <Splitter style={{ height: '100%' }}>
             <Splitter.Panel
-              defaultSize="20%"
-              min="20%"
+              defaultSize="23%"
+              min="23%"
               max="70%"
               style={{
                 padding: 0,
               }}
             >
-              <GlobalMenu />
+              <LayoutSide />
             </Splitter.Panel>
             <Splitter.Panel style={{
                 padding: 0,

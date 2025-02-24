@@ -17,7 +17,7 @@ const Home = () => {
   }
   return (
     <div className={styles['homeContainer']}>
-      <input
+      {/* <input
         value={repoPath}
         onChange={(e) => setRepoPath(e.target.value)}
         placeholder="输入Git仓库路径"
@@ -31,7 +31,7 @@ const Home = () => {
             <button onClick={() => loadDiff(commit)}>查看diff</button>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   )
 }
