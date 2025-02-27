@@ -9,6 +9,9 @@ const api = {
   getDiff: (repoPath) => {
     return ipcRenderer.invoke('getDiff', repoPath)
   },
+  getGitBranch: (repoPath) => {
+    return ipcRenderer.invoke('getGitBranch', repoPath)
+  },
   chooseFolder: () => {
     return ipcRenderer.invoke('chooseFolder')
   }

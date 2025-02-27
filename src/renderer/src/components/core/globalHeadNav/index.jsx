@@ -1,57 +1,55 @@
 import styles from './index.module.scss'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { PlusOutlined, BranchesOutlined } from '@ant-design/icons'
 import { Flex, Tag } from 'antd'
-import { gitStore } from '../../../localStore'
+import { gitStoreLocalforage } from '../../../localStore'
+import { useDispatch, useSelector } from 'react-redux'
+import { initSelectedTag, setRepoPaths, setCurrentTag } from '../../../store/gitStore'
 
 const GlobalHeadNav = () => {
-  const [tags, setTags] = useState([])
+  const dispatch = useDispatch()
+  const gitStroe = useSelector((state) => state.gitStore)
 
   /** remove select git repo */
   const handleClose = async (removedRepo) => {
-    const repoPaths = (await gitStore.getItem('repoPath')) || []
+    const repoPaths = (await gitStoreLocalforage.getItem('repoPath')) || []
     const newRepoPaths = repoPaths.filter((item) => item.name !== removedRepo)
-    gitStore.setItem('repoPath', newRepoPaths)
-    setTags(newRepoPaths.map((item) => item.name))
+    gitStoreLocalforage.setItem('repoPath', newRepoPaths)
   }
 
   /** set select git repo */
   const setRepoPath = async () => {
     const repoPath = await window.api.chooseFolder()
-    const repoPaths = (await gitStore.getItem('repoPath')) || []
-    if (!repoPaths.some((item) => item.path === repoPath)) {
-      repoPaths.push({
-        path: repoPath,
-        name: repoPath.split('/').pop()
-      })
-      gitStore.setItem('repoPath', repoPaths)
-      return setTags(repoPaths.map((item) => item.name))
+    if (!gitStroe.repoPaths.some((item) => item.path === repoPath)) {
+      dispatch(
+        setRepoPaths([...gitStroe.repoPaths, { path: repoPath, name: repoPath.split('/').pop() }])
+      )
+      dispatch(setCurrentTag(repoPath.split('/').pop()))
     }
   }
 
-  const getRepoPaths = async () => {
-    const repoPaths = (await gitStore.getItem('repoPath')) || []
-    setTags(repoPaths.map((item) => item.name))
+  const handleClick = (name) => {
+    dispatch(setCurrentTag(name))
   }
 
   useEffect(() => {
-    getRepoPaths()
-  }, [])
+    dispatch(initSelectedTag())
+  }, [dispatch])
 
   return (
     <div className={styles.headNav}>
       <Flex gap="4px 0" wrap className={styles.headNavTags}>
-        {tags.map((tag) => (
-          <Tag
-            key={tag}
-            closable={true}
+        {gitStroe.repoPaths.map((itm) => (
+          <Tag.CheckableTag
+            key={itm.name}
             icon={<BranchesOutlined />}
-            bordered={false}
             className={styles.headNavTag}
-            onClose={() => handleClose(tag)}
+            onClose={() => handleClose(itm.name)}
+            onClick={() => handleClick(itm.name)}
+            checked={gitStroe.currentTag === itm.name}
           >
-            {tag}
-          </Tag>
+            {itm.name}
+          </Tag.CheckableTag>
         ))}
         <Tag className={styles.headNavTagPlus} icon={<PlusOutlined />} onClick={setRepoPath} />
       </Flex>

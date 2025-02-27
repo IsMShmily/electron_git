@@ -3,7 +3,7 @@ import LayoutSide from './modules/layoutSide'
 import GlobalMain from './modules/layoutMain'
 import GlobalHead from './modules/layoutHead'
 import { Layout } from 'antd'
-import { Flex, Splitter, Typography } from 'antd'
+import { Splitter } from 'antd'
 
 const GlobalLayout = () => {
   return (
@@ -24,14 +24,17 @@ const GlobalLayout = () => {
               max="70%"
               style={{
                 padding: 0,
+                overflow: 'hidden'
               }}
             >
               <LayoutSide />
             </Splitter.Panel>
-            <Splitter.Panel style={{
+            <Splitter.Panel
+              style={{
                 padding: 0,
                 backgroundColor: '#1c1e21'
-              }} >
+              }}
+            >
               <GlobalMain />
             </Splitter.Panel>
           </Splitter>

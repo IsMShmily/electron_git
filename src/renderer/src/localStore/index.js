@@ -1,3 +1,3 @@
-import gitStore from './gitStore'
+import gitStoreLocalforage from './gitStore'
 
-export { gitStore }
+export { gitStoreLocalforage }

@@ -42,12 +42,28 @@ export const getDiff = (repoPath) => {
   return detectChangeType(diff)
 }
 
+/**
+ * 获取 git 分支
+ * @param {*} repoPath
+ * @returns
+ */
+export const getGitBranch = (repoPath) => {
+  const branches = execSync(`git -C ${repoPath} branch -a`).toString()
+  return branches
+    .split('\n')
+    .filter(Boolean) // 去除空行
+    .map((branch) => branch.trim()) // 去除空格
+}
+
 const setupGitIPC = () => {
   ipcMain.handle('getGitLog', (event, repoPath) => {
     return getGitLog(repoPath)
   })
   ipcMain.handle('getDiff', (event, repoPath) => {
     return getDiff(repoPath)
+  })
+  ipcMain.handle('getGitBranch', (event, repoPath) => {
+    return getGitBranch(repoPath)
   })
 }
 

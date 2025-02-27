@@ -6,7 +6,6 @@
 
     .headNavTags {
         height: 70%;
-        // border: 1px solid red;
         -webkit-app-region: no-drag;
 
         .headNavTag {
@@ -16,12 +15,7 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            :global(.ant-tag-close-icon) {
-                color: rgba(255, 255, 255, 0.4);
-            }
-            &:hover {
-                background-color: #2a3141;
-            }
+          
         }
 
         .headNavTagPlus {

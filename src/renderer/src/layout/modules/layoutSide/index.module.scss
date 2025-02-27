@@ -9,6 +9,7 @@
     &__headerGroup {
         width: 100%;
         height: calc(100% - 200px);
+
         &__header {
             width: 100%;
             text-align: center;
@@ -27,7 +28,7 @@
                 height: 30px;
                 display: flex;
                 align-items: center;
-                padding: 10px 20px 10px 10px;
+                padding: 10px 10px 10px 10px;
                 box-sizing: border-box;
 
                 &__checkbox {
@@ -39,17 +40,17 @@
                     height: 100%;
                     font-size: 11px;
                     font-weight: 500;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+                
                 }
 
                 :global(.ant-checkbox-wrapper) {
                     display: flex;
                     align-items: center;
+                    overflow: hidden;
                     span:nth-child(1) {
                     }
                     span:nth-child(2) {
+                     overflow: hidden;
                     }
                 }
             }

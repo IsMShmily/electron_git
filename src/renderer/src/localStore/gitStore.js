@@ -1,7 +1,7 @@
 import localforage from 'localforage'
 
-const gitStore = localforage.createInstance({
+const gitStoreLocalforage = localforage.createInstance({
   name: 'GitStore'
 })
 
-export default gitStore
+export default gitStoreLocalforage
