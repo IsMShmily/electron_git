@@ -5,7 +5,11 @@ import { Checkbox, Avatar, Input, Button, Tooltip } from 'antd'
 import { useState, useEffect } from 'react'
 const { TextArea } = Input
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentRepoFileStatus, setCurrentRepoStatusType } from '../../../store/gitStore'
+import {
+  setCurrentRepoFileStatus,
+  setCurrentRepoStatusType,
+  setCurrentRepoStatusCount
+} from '../../../store/gitStore'
 
 const CheckboxGroup = Checkbox.Group
 
@@ -74,6 +78,8 @@ const LayoutSide = () => {
     const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
     const res = await window.api.getCurrentRepoStatus(currentItem.path)
     dispatch(setCurrentRepoStatusType(res))
+    const count = await window.api.getCurrentRepoStatusCount(currentItem.path, res)
+    dispatch(setCurrentRepoStatusCount(count))
   }
 
   const clearCommit = () => {
