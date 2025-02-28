@@ -18,6 +18,9 @@ const api = {
   getCurrentBranch: (repoPath) => {
     return ipcRenderer.invoke('getCurrentBranch', repoPath)
   },
+  getCurrentRepoFileStatus: (repoPath) => {
+    return ipcRenderer.invoke('getCurrentRepoFileStatus', repoPath)
+  },
   getCurrentRepoStatus: (repoPath) => {
     return ipcRenderer.invoke('getCurrentRepoStatus', repoPath)
   },

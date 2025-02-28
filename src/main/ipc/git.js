@@ -65,11 +65,11 @@ export const getCurrentBranch = (repoPath) => {
 }
 
 /**
- * 获取当前仓库状态
+ * 获取当前仓库状态-文件列表
  * @param {*} repoPath
  * @returns
  */
-export const getCurrentRepoStatus = (repoPath) => {
+export const getCurrentRepoFileStatus = (repoPath) => {
   // 执行 git status 命令，获取状态信息
   const status = execSync(`git -C ${repoPath} status --porcelain`).toString()
 
@@ -80,6 +80,16 @@ export const getCurrentRepoStatus = (repoPath) => {
     .map((line) => line.slice(3)) // 获取文件路径（去掉前面的状态信息）
 
   return files
+}
+
+/**
+ * 获取当前仓库状态
+ * @param {*} repoPath
+ * @returns
+ */
+export const getCurrentRepoStatus = (repoPath) => {
+  const status = execSync(`git -C ${repoPath} status`).toString()
+  return status
 }
 
 /**
@@ -109,6 +119,9 @@ export const commitGit = (repoPath, files, summary, desc) => {
   execSync(`git -C ${repoPath} commit -m "${summary}" -m "${desc}"`)
 }
 
+/**
+ * 设置 git ipc
+ */
 const setupGitIPC = () => {
   ipcMain.handle('getGitLog', (event, repoPath) => {
     return getGitLog(repoPath)
@@ -122,14 +135,17 @@ const setupGitIPC = () => {
   ipcMain.handle('getCurrentBranch', (event, repoPath) => {
     return getCurrentBranch(repoPath)
   })
-  ipcMain.handle('getCurrentRepoStatus', (event, repoPath) => {
-    return getCurrentRepoStatus(repoPath)
+  ipcMain.handle('getCurrentRepoFileStatus', (event, repoPath) => {
+    return getCurrentRepoFileStatus(repoPath)
   })
   ipcMain.handle('getGitUserInfo', (event) => {
     return getGitUserInfo()
   })
   ipcMain.handle('commitGit', (event, repoPath, files, summary, desc) => {
     return commitGit(repoPath, files, summary, desc)
+  })
+  ipcMain.handle('getCurrentRepoStatus', (event, repoPath) => {
+    return getCurrentRepoStatus(repoPath)
   })
 }
 

@@ -27,15 +27,15 @@ const LayoutSide = () => {
   }
 
   /** get current repo status */
-  const getCurrentRepoStatus = async () => {
+  const getCurrentRepoFileStatus = async () => {
     const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
-    const status = await window.api.getCurrentRepoStatus(currentItem.path)
+    const status = await window.api.getCurrentRepoFileStatus(currentItem.path)
     dispatch(setCurrentRepoStatus(status))
     setCheckedList(status)
   }
   useEffect(() => {
     if (gitStroe.repoPaths.length > 0) {
-      getCurrentRepoStatus()
+      getCurrentRepoFileStatus()
     }
   }, [gitStroe.repoPaths])
 
@@ -65,8 +65,15 @@ const LayoutSide = () => {
   const onCommit = async () => {
     const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
     await window.api.commitGit(currentItem.path, checkedList, summary, desc)
-    getCurrentRepoStatus()
+    getCurrentRepoFileStatus()
     clearCommit()
+    onCheckAndChangeRepoStatus()
+  }
+
+  const onCheckAndChangeRepoStatus = async () => {
+    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
+    const res = await window.api.getCurrentRepoStatus(currentItem.path)
+    console.log(res)
   }
 
   const clearCommit = () => {
