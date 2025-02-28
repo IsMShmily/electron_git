@@ -89,7 +89,31 @@ export const getCurrentRepoFileStatus = (repoPath) => {
  */
 export const getCurrentRepoStatus = (repoPath) => {
   const status = execSync(`git -C ${repoPath} status`).toString()
-  return status
+  if (status.includes('Your branch is ahead of')) {
+    return 'PUSH'
+  } else if (status.includes('Your branch is behind')) {
+    return 'FETCH'
+  } else if (status.includes('Your branch is up to date')) {
+    return 'UP_TO_DATE'
+  }
+  return 'UNKNOWN'
+}
+
+/**
+ * 获取当前仓库状态数量
+ * @param {*} repoPath
+ * @param {*} status
+ * @returns
+ */
+export const getCurrentRepoStatusCount = (repoPath, status) => {
+  if (status === 'PUSH') {
+    const count = execSync(`git -C ${repoPath} rev-list --count origin/main..HEAD`).toString()
+    return count.split('\n')[0]
+  }
+  if (status === 'FETCH') {
+    const count = execSync(`git -C ${repoPath} rev-list --count HEAD..origin/main`).toString()
+    return count.split('\n')[0]
+  }
 }
 
 /**
@@ -110,7 +134,6 @@ export const getGitUserInfo = () => {
  * @param {*} desc 提交描述
  */
 export const commitGit = (repoPath, files, summary, desc) => {
-  console.log(repoPath, files, summary, desc)
   // 遍历文件列表，执行 git add 命令
   files.forEach((file) => {
     execSync(`git -C ${repoPath} add ${file}`)
@@ -118,6 +141,23 @@ export const commitGit = (repoPath, files, summary, desc) => {
   // 执行 git commit 命令
   execSync(`git -C ${repoPath} commit -m "${summary}" -m "${desc}"`)
 }
+
+/**
+ * 推送 git
+ * @param {*} repoPath
+ */
+export const pushGit = (repoPath) => {
+  execSync(`git -C ${repoPath} push`)
+}
+
+/**
+ * 拉取 git
+ * @param {*} repoPath
+ */
+export const fetchGit = (repoPath) => {
+  execSync(`git -C ${repoPath} fetch`)
+}
+
 
 /**
  * 设置 git ipc
@@ -146,6 +186,15 @@ const setupGitIPC = () => {
   })
   ipcMain.handle('getCurrentRepoStatus', (event, repoPath) => {
     return getCurrentRepoStatus(repoPath)
+  })
+  ipcMain.handle('getCurrentRepoStatusCount', (event, repoPath, status) => {
+    return getCurrentRepoStatusCount(repoPath, status)
+  })
+  ipcMain.handle('pushGit', (event, repoPath) => {
+    return pushGit(repoPath)
+  })
+  ipcMain.handle('fetchGit', (event, repoPath) => {
+    return fetchGit(repoPath)
   })
 }
 

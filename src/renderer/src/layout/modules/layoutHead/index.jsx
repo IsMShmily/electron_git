@@ -1,11 +1,23 @@
 import styles from './index.module.scss'
 import { Layout } from 'antd'
-import { CaretDownOutlined, SyncOutlined, BranchesOutlined, CloudOutlined } from '@ant-design/icons'
-import { Dropdown, Space } from 'antd'
+import {
+  CaretDownOutlined,
+  SyncOutlined,
+  BranchesOutlined,
+  CloudOutlined,
+  CloudUploadOutlined,
+  CloudDownloadOutlined
+} from '@ant-design/icons'
+import { Dropdown, Space, Badge } from 'antd'
 const { Header } = Layout
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentRepo, setCurrentBranch } from '../../../store/gitStore'
+import {
+  setCurrentRepo,
+  setCurrentBranch,
+  setCurrentRepoStatusType,
+  setCurrentRepoStatusCount
+} from '../../../store/gitStore'
 
 const GlobalHead = () => {
   const dispatch = useDispatch()
@@ -37,12 +49,19 @@ const GlobalHead = () => {
     }
   }, [gitStroe.repoPaths])
 
-  /** get current branch */
+  /** get current branch And current repo status */
   const getCurrentBranch = async () => {
     const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
     const branch = await window.api.getCurrentBranch(currentItem.path)
     dispatch(setCurrentBranch(branch))
+
+    const status = await window.api.getCurrentRepoStatus(currentItem.path)
+    dispatch(setCurrentRepoStatusType(status))
+
+    const count = await window.api.getCurrentRepoStatusCount(currentItem.path, status)
+    dispatch(setCurrentRepoStatusCount(count))
   }
+
   const changeBranch = ({ key }) => {
     dispatch(setCurrentBranch(key))
   }
@@ -69,8 +88,22 @@ const GlobalHead = () => {
   }, [gitStroe.repoPaths])
 
   const changeRepository = (e) => {
-    console
     dispatch(setCurrentRepo(e.key))
+  }
+
+  const onClickHandler = async () => {
+    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
+    const status = await window.api.getCurrentRepoStatus(currentItem.path)
+    if (status === 'PUSH') {
+      await window.api.pushGit(currentItem.path)
+      getCurrentBranch()
+    } else if (status === 'FETCH') {
+      await window.api.fetchGit(currentItem.path)
+    } else if (status === 'UP_TO_DATE') {
+      await window.api.fetchGit(currentItem.path)
+    } else {
+      console.log('unknown')
+    }
   }
 
   return (
@@ -120,11 +153,33 @@ const GlobalHead = () => {
           </div>
         </Dropdown>
 
-        <div className={styles.head__main__button}>
-          <div className={styles.head__main__button__fetch}>
-            <div>Fetch origin</div>
-            <SyncOutlined className={styles.icon} />
-          </div>
+        <div className={styles.head__main__button} onClick={onClickHandler}>
+          {/* Fetch */}
+          {gitStroe.currentRepoStatusType === 'FETCH' && (
+            <div className={styles.head__main__button__fetch}>
+              <div>Fetch origin</div>
+              <CloudDownloadOutlined className={styles.icon} />
+            </div>
+          )}
+
+          {/* Push */}
+          {gitStroe.currentRepoStatusType === 'PUSH' && (
+            <Badge count={gitStroe.currentRepoStatusCount} size="small" offset={[20, 0]}>
+              <div className={styles.head__main__button__fetch}>
+                <div>Push to origin</div> <CloudUploadOutlined className={styles.icon} />
+              </div>
+            </Badge>
+          )}
+
+          {/* Up to date */}
+          {gitStroe.currentRepoStatusType === 'UP_TO_DATE' ||
+            (gitStroe.currentRepoStatusType === 'UNKNOWN' && (
+              <div className={styles.head__main__button__fetch}>
+                <div>Up to date</div>
+                <SyncOutlined className={styles.icon} />
+              </div>
+            ))}
+
           <div className={styles.lastFetch}>Last fetched 24 minutes ago</div>
         </div>
       </div>

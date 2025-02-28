@@ -29,6 +29,15 @@ const api = {
   },
   commitGit: (repoPath, files, summary, desc) => {
     return ipcRenderer.invoke('commitGit', repoPath, files, summary, desc)
+  },
+  getCurrentRepoStatusCount: (repoPath, status) => {
+    return ipcRenderer.invoke('getCurrentRepoStatusCount', repoPath, status)
+  },
+  pushGit: (repoPath) => {
+    return ipcRenderer.invoke('pushGit', repoPath)
+  },
+  fetchGit: (repoPath) => {
+    return ipcRenderer.invoke('fetchGit', repoPath)
   }
 }
 

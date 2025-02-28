@@ -8,7 +8,9 @@ const gitStore = createSlice({
     repoPaths: [],
     currentRepo: null,
     currentBranch: null,
-    currentRepoStatus: []
+    currentRepoStatus: [],
+    currentRepoStatusType: 'UNKNOWN',
+    currentRepoStatusCount: 0
   },
   reducers: {
     /**
@@ -42,12 +44,33 @@ const gitStore = createSlice({
     },
 
     /**
-     * 设置 当前仓库状态
+     * 设置 当前仓库文件状态
      * @param {*} state
      * @param {*} action
      */
-    setCurrentRepoStatus(state, action) {
+    setCurrentRepoFileStatus(state, action) {
       state.currentRepoStatus = action.payload
+      gitStoreLocalforage.setItem('currentRepoFileStatus', action.payload)
+    },
+
+    /**
+     * 设置 当前仓库状态类型
+     * @param {*} state
+     * @param {*} action
+     */
+    setCurrentRepoStatusType(state, action) {
+      state.currentRepoStatusType = action.payload
+      gitStoreLocalforage.setItem('currentRepoStatusType', action.payload)
+    },
+
+    /**
+     * 设置 当前仓库状态数量
+     * @param {*} state
+     * @param {*} action
+     */
+    setCurrentRepoStatusCount(state, action) {
+      state.currentRepoStatusCount = action.payload
+      gitStoreLocalforage.setItem('currentRepoStatusCount', action.payload)
     }
   }
 })
@@ -67,6 +90,12 @@ export const initSelectedTag = () => async (dispatch) => {
   dispatch(setRepoPaths(repoPaths || []))
 }
 
-export const { setRepoPaths, setCurrentRepo, setCurrentBranch, setCurrentRepoStatus } =
-  gitStore.actions
+export const {
+  setRepoPaths,
+  setCurrentRepo,
+  setCurrentBranch,
+  setCurrentRepoFileStatus,
+  setCurrentRepoStatusType,
+  setCurrentRepoStatusCount
+} = gitStore.actions
 export default gitStore.reducer
