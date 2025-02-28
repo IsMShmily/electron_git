@@ -14,6 +14,18 @@ const api = {
   },
   chooseFolder: () => {
     return ipcRenderer.invoke('chooseFolder')
+  },
+  getCurrentBranch: (repoPath) => {
+    return ipcRenderer.invoke('getCurrentBranch', repoPath)
+  },
+  getCurrentRepoStatus: (repoPath) => {
+    return ipcRenderer.invoke('getCurrentRepoStatus', repoPath)
+  },
+  getGitUserInfo: () => {
+    return ipcRenderer.invoke('getGitUserInfo')
+  },
+  commitGit: (repoPath, files, summary, desc) => {
+    return ipcRenderer.invoke('commitGit', repoPath, files, summary, desc)
   }
 }
 

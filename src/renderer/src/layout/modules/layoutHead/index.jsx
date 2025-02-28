@@ -1,27 +1,54 @@
 import styles from './index.module.scss'
 import { Layout } from 'antd'
-import { CaretDownOutlined, SyncOutlined } from '@ant-design/icons'
+import { CaretDownOutlined, SyncOutlined, BranchesOutlined, CloudOutlined } from '@ant-design/icons'
 import { Dropdown, Space } from 'antd'
 const { Header } = Layout
 import { useEffect, useState } from 'react'
-import { gitStoreLocalforage } from '../../../localStore'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentTag } from '../../../store/gitStore'
+import { setCurrentRepo, setCurrentBranch } from '../../../store/gitStore'
+
 const GlobalHead = () => {
   const dispatch = useDispatch()
   const gitStroe = useSelector((state) => state.gitStore)
 
-  const [branch, setBranch] = useState('')
-
+  /** get git branch */
+  const [branchRecords, setBranchRecords] = useState('')
   const getGitBranch = async () => {
-    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentTag)
+    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
     const branch = await window.api.getGitBranch(currentItem.path)
-    console.log('branch', branch)
-    // setBranch(branch)
+    setBranchRecords(
+      branch.map((item) => {
+        return {
+          label: item,
+          key: item,
+          icon:
+            item.split('/')[0] === 'remotes' || item.split('/')[0] === 'origin' ? (
+              <CloudOutlined />
+            ) : (
+              <BranchesOutlined />
+            )
+        }
+      })
+    )
   }
   useEffect(() => {
     if (gitStroe.repoPaths.length > 0) {
       getGitBranch()
+    }
+  }, [gitStroe.repoPaths])
+
+  /** get current branch */
+  const getCurrentBranch = async () => {
+    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
+    const branch = await window.api.getCurrentBranch(currentItem.path)
+    dispatch(setCurrentBranch(branch))
+  }
+  const changeBranch = ({ key }) => {
+    dispatch(setCurrentBranch(key))
+  }
+  useEffect(() => {
+    if (gitStroe.repoPaths.length > 0) {
+      getCurrentBranch()
     }
   }, [gitStroe.repoPaths])
 
@@ -41,14 +68,11 @@ const GlobalHead = () => {
     getRepoPaths()
   }, [gitStroe.repoPaths])
 
-  const [defaultSelectedKeys, setDefaultSelectedKeys] = useState('')
-  const onClick = ({ key }) => {
-    dispatch(setCurrentTag(key))
+  const changeRepository = (e) => {
+    console
+    dispatch(setCurrentRepo(e.key))
   }
 
-  useEffect(() => {
-    setDefaultSelectedKeys(gitStroe.currentTag)
-  }, [gitStroe.currentTag])
   return (
     <Header className={styles.head}>
       <div className={styles.head__main}>
@@ -56,25 +80,41 @@ const GlobalHead = () => {
           menu={{
             items: repositoryRecords,
             selectable: true,
-            onClick,
-            defaultSelectedKeys: defaultSelectedKeys
+            onClick: changeRepository,
+            defaultSelectedKeys: gitStroe.currentRepo,
+            style: {
+              maxHeight: '40vh',
+              overflowY: 'auto'
+            }
           }}
           trigger={['click']}
         >
           <div onClick={(e) => e.preventDefault()} className={styles.head__main__repository}>
             <div className={styles.title}>Current Repository</div>
             <Space>
-              <span>{gitStroe.currentTag}</span>
+              <span>{gitStroe.currentRepo}</span>
               <CaretDownOutlined className={styles.caretDown} />
             </Space>
           </div>
         </Dropdown>
 
-        <Dropdown menu={{ items: repositoryRecords }} trigger={['click']}>
+        <Dropdown
+          menu={{
+            items: branchRecords,
+            onClick: changeBranch,
+            selectable: true,
+            defaultSelectedKeys: gitStroe.currentBranch,
+            style: {
+              maxHeight: '40vh',
+              overflowY: 'auto'
+            }
+          }}
+          trigger={['click']}
+        >
           <div onClick={(e) => e.preventDefault()} className={styles.head__main__repository}>
             <div className={styles.title}>Current Branch</div>
             <Space>
-              <span>main</span>
+              <span>{gitStroe.currentBranch}</span>
               <CaretDownOutlined className={styles.caretDown} />
             </Space>
           </div>

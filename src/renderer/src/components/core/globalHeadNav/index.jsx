@@ -4,7 +4,7 @@ import { PlusOutlined, BranchesOutlined } from '@ant-design/icons'
 import { Flex, Tag } from 'antd'
 import { gitStoreLocalforage } from '../../../localStore'
 import { useDispatch, useSelector } from 'react-redux'
-import { initSelectedTag, setRepoPaths, setCurrentTag } from '../../../store/gitStore'
+import { initSelectedTag, setRepoPaths, setCurrentRepo } from '../../../store/gitStore'
 
 const GlobalHeadNav = () => {
   const dispatch = useDispatch()
@@ -24,12 +24,12 @@ const GlobalHeadNav = () => {
       dispatch(
         setRepoPaths([...gitStroe.repoPaths, { path: repoPath, name: repoPath.split('/').pop() }])
       )
-      dispatch(setCurrentTag(repoPath.split('/').pop()))
+      dispatch(setCurrentRepo(repoPath.split('/').pop()))
     }
   }
 
   const handleClick = (name) => {
-    dispatch(setCurrentTag(name))
+    dispatch(setCurrentRepo(name))
   }
 
   useEffect(() => {
@@ -46,9 +46,10 @@ const GlobalHeadNav = () => {
             className={styles.headNavTag}
             onClose={() => handleClose(itm.name)}
             onClick={() => handleClick(itm.name)}
-            checked={gitStroe.currentTag === itm.name}
+            checked={gitStroe.currentRepo === itm.name}
           >
-            {itm.name}
+            <BranchesOutlined />
+            <span> {itm.name}</span>
           </Tag.CheckableTag>
         ))}
         <Tag className={styles.headNavTagPlus} icon={<PlusOutlined />} onClick={setRepoPath} />

@@ -6,7 +6,9 @@ const gitStore = createSlice({
 
   initialState: {
     repoPaths: [],
-    currentTag: null
+    currentRepo: null,
+    currentBranch: null,
+    currentRepoStatus: []
   },
   reducers: {
     /**
@@ -20,13 +22,32 @@ const gitStore = createSlice({
     },
 
     /**
-     * 设置 当前选中的 currentTag
+     * 设置 当前选中的 currentRepo
      * @param {*} state
      * @param {*} action
      */
-    setCurrentTag(state, action) {
-      state.currentTag = action.payload
-      gitStoreLocalforage.setItem('currentTag', action.payload)
+    setCurrentRepo(state, action) {
+      state.currentRepo = action.payload
+      gitStoreLocalforage.setItem('currentRepo', action.payload)
+    },
+
+    /**
+     * 设置 当前选中的 currentBranch
+     * @param {*} state
+     * @param {*} action
+     */
+    setCurrentBranch(state, action) {
+      state.currentBranch = action.payload
+      gitStoreLocalforage.setItem('currentBranch', action.payload)
+    },
+
+    /**
+     * 设置 当前仓库状态
+     * @param {*} state
+     * @param {*} action
+     */
+    setCurrentRepoStatus(state, action) {
+      state.currentRepoStatus = action.payload
     }
   }
 })
@@ -36,15 +57,16 @@ const gitStore = createSlice({
  * @returns
  */
 export const initSelectedTag = () => async (dispatch) => {
-  // 获取 当前选中的 currentTag 和 repoPaths
-  const [currentTag, repoPaths] = await Promise.all([
-    gitStoreLocalforage.getItem('currentTag'),
+  // 获取 当前选中的 currentRepo 和 repoPaths
+  const [currentRepo, repoPaths] = await Promise.all([
+    gitStoreLocalforage.getItem('currentRepo'),
     gitStoreLocalforage.getItem('repoPaths')
   ])
 
-  dispatch(setCurrentTag(currentTag || null))
+  dispatch(setCurrentRepo(currentRepo || null))
   dispatch(setRepoPaths(repoPaths || []))
 }
 
-export const { setRepoPaths, setCurrentTag } = gitStore.actions
+export const { setRepoPaths, setCurrentRepo, setCurrentBranch, setCurrentRepoStatus } =
+  gitStore.actions
 export default gitStore.reducer
