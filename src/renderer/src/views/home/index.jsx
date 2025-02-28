@@ -91,7 +91,7 @@ const Home = () => {
         </>
       ) : (
         <div className={styles['homeContainer__noDiff']}>
-          <Empty description="Local file has no changes" />
+          <Empty description="Local file has no changes" image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </div>
       )}
     </div>

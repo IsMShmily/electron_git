@@ -20,15 +20,15 @@ const LayoutSide = () => {
   const [checkedList, setCheckedList] = useState([])
 
   /** check all */
-  const checkAll = gitStroe.currentRepoStatus.length === checkedList.length
+  const checkAll = gitStroe.currentRepoFileStatus.length === checkedList.length
   const indeterminate =
-    checkedList.length > 0 && checkedList.length < gitStroe.currentRepoStatus.length
+    checkedList.length > 0 && checkedList.length < gitStroe.currentRepoFileStatus.length
 
   const onChange = (list) => {
     setCheckedList(list)
   }
   const onCheckAllChange = (e) => {
-    setCheckedList(e.target.checked ? gitStroe.currentRepoStatus : [])
+    setCheckedList(e.target.checked ? gitStroe.currentRepoFileStatus : [])
   }
 
   /** get current repo status */
@@ -101,14 +101,14 @@ const LayoutSide = () => {
             checked={checkAll}
             className={styles['side__main__headerGroup__header']}
           >
-            {gitStroe.currentRepoStatus.length} changed files
+            {gitStroe.currentRepoFileStatus.length} changed files
           </Checkbox>
           <CheckboxGroup
             value={checkedList}
             onChange={onChange}
             className={styles['side__main__headerGroup__checkboxGroup']}
           >
-            {gitStroe.currentRepoStatus.map((item) => (
+            {gitStroe.currentRepoFileStatus.map((item) => (
               <div
                 className={styles['side__main__headerGroup__checkboxGroup__item']}
                 key={item}

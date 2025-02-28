@@ -8,7 +8,7 @@ const gitStore = createSlice({
     repoPaths: [],
     currentRepo: null,
     currentBranch: null,
-    currentRepoStatus: [],
+    currentRepoFileStatus: [],
     currentRepoStatusType: 'UNKNOWN',
     currentRepoStatusCount: 0,
     currentFilePath: null
@@ -50,7 +50,7 @@ const gitStore = createSlice({
      * @param {*} action
      */
     setCurrentRepoFileStatus(state, action) {
-      state.currentRepoStatus = action.payload
+      state.currentRepoFileStatus = action.payload
       gitStoreLocalforage.setItem('currentRepoFileStatus', action.payload)
     },
 
