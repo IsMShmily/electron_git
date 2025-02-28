@@ -66,8 +66,13 @@ const LayoutSide = () => {
     const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
     await window.api.commitGit(currentItem.path, checkedList, summary, desc)
     getCurrentRepoStatus()
+    clearCommit()
   }
 
+  const clearCommit = () => {
+    setSummary('')
+    setDesc('')
+  }
   return (
     <Sider width="100%" style={{ height: '100%' }}>
       <div className={styles['side__main']}>
