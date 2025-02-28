@@ -10,7 +10,8 @@ const gitStore = createSlice({
     currentBranch: null,
     currentRepoStatus: [],
     currentRepoStatusType: 'UNKNOWN',
-    currentRepoStatusCount: 0
+    currentRepoStatusCount: 0,
+    currentFilePath: null
   },
   reducers: {
     /**
@@ -71,23 +72,37 @@ const gitStore = createSlice({
     setCurrentRepoStatusCount(state, action) {
       state.currentRepoStatusCount = action.payload
       gitStoreLocalforage.setItem('currentRepoStatusCount', action.payload)
+    },
+
+    /**
+     * 设置 当前选中的 currentFilePath
+     * @param {*} state
+     * @param {*} action
+     */
+    setCurrentFilePath(state, action) {
+      state.currentFilePath = action.payload
+      gitStoreLocalforage.setItem('currentFilePath', action.payload)
     }
   }
 })
 
 /**
- * 初始化 当前选中的 selectedRepo 和 repoPaths
+ * 初始化 缓存数据
  * @returns
  */
 export const initSelectedTag = () => async (dispatch) => {
   // 获取 当前选中的 currentRepo 和 repoPaths
-  const [currentRepo, repoPaths] = await Promise.all([
+  const [currentRepo, repoPaths, currentBranch, currentFilePath] = await Promise.all([
     gitStoreLocalforage.getItem('currentRepo'),
-    gitStoreLocalforage.getItem('repoPaths')
+    gitStoreLocalforage.getItem('repoPaths'),
+    gitStoreLocalforage.getItem('currentBranch'),
+    gitStoreLocalforage.getItem('currentFilePath')
   ])
 
   dispatch(setCurrentRepo(currentRepo || null))
   dispatch(setRepoPaths(repoPaths || []))
+  dispatch(setCurrentBranch(currentBranch || null))
+  dispatch(setCurrentFilePath(currentFilePath || null))
 }
 
 export const {
@@ -96,6 +111,7 @@ export const {
   setCurrentBranch,
   setCurrentRepoFileStatus,
   setCurrentRepoStatusType,
-  setCurrentRepoStatusCount
+  setCurrentRepoStatusCount,
+  setCurrentFilePath
 } = gitStore.actions
 export default gitStore.reducer

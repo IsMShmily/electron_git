@@ -26,7 +26,9 @@
     "electron-log": "^5.3.0",
     "electron-store": "^10.0.1",
     "electron-updater": "^6.1.7",
-    "localforage": "^1.10.0"
+    "localforage": "^1.10.0",
+    "prismjs": "^1.29.0",
+    "react-diff-viewer": "^3.1.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config": "^1.0.2",

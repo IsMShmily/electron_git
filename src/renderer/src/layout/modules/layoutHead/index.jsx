@@ -172,13 +172,13 @@ const GlobalHead = () => {
           )}
 
           {/* Up to date */}
-          {gitStroe.currentRepoStatusType === 'UP_TO_DATE' ||
-            (gitStroe.currentRepoStatusType === 'UNKNOWN' && (
-              <div className={styles.head__main__button__fetch}>
-                <div>Up to date</div>
-                <SyncOutlined className={styles.icon} />
-              </div>
-            ))}
+          {(gitStroe.currentRepoStatusType === 'UP_TO_DATE' ||
+            gitStroe.currentRepoStatusType === 'UNKNOWN') && (
+            <div className={styles.head__main__button__fetch}>
+              <div>Up to date</div>
+              <SyncOutlined className={styles.icon} />
+            </div>
+          )}
 
           <div className={styles.lastFetch}>Last fetched 24 minutes ago</div>
         </div>

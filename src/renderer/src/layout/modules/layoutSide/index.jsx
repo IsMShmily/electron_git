@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   setCurrentRepoFileStatus,
   setCurrentRepoStatusType,
-  setCurrentRepoStatusCount
+  setCurrentRepoStatusCount,
+  setCurrentFilePath
 } from '../../../store/gitStore'
 
 const CheckboxGroup = Checkbox.Group
@@ -86,6 +87,10 @@ const LayoutSide = () => {
     setSummary('')
     setDesc('')
   }
+
+  const onFileClick = (item) => {
+    dispatch(setCurrentFilePath(item))
+  }
   return (
     <Sider width="100%" style={{ height: '100%' }}>
       <div className={styles['side__main']}>
@@ -104,16 +109,22 @@ const LayoutSide = () => {
             className={styles['side__main__headerGroup__checkboxGroup']}
           >
             {gitStroe.currentRepoStatus.map((item) => (
-              <div className={styles['side__main__headerGroup__checkboxGroup__item']} key={item}>
+              <div
+                className={styles['side__main__headerGroup__checkboxGroup__item']}
+                key={item}
+                style={{
+                  backgroundColor: gitStroe?.currentFilePath === item ? '#1b1c1e' : 'transparent'
+                }}
+                onClick={() => onFileClick(item)}
+              >
                 <Checkbox
                   value={item}
                   className={styles['side__main__headerGroup__checkboxGroup__item__checkbox']}
                   large="small"
-                >
-                  <div className={styles['side__main__headerGroup__checkboxGroup__item__text']}>
-                    {item}
-                  </div>
-                </Checkbox>
+                ></Checkbox>
+                <div className={styles['side__main__headerGroup__checkboxGroup__item__text']}>
+                  {item}
+                </div>
               </div>
             ))}
           </CheckboxGroup>

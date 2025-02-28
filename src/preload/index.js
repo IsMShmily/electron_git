@@ -6,9 +6,6 @@ const api = {
   getGitLog: (repoPath) => {
     return ipcRenderer.invoke('getGitLog', repoPath)
   },
-  getDiff: (repoPath) => {
-    return ipcRenderer.invoke('getDiff', repoPath)
-  },
   getGitBranch: (repoPath) => {
     return ipcRenderer.invoke('getGitBranch', repoPath)
   },
@@ -38,6 +35,12 @@ const api = {
   },
   fetchGit: (repoPath) => {
     return ipcRenderer.invoke('fetchGit', repoPath)
+  },
+  getFileLastCommitContent: (repoPath, filePath) => {
+    return ipcRenderer.invoke('getFileLastCommitContent', repoPath, filePath)
+  },
+  readFileContent: (filePath) => {
+    return ipcRenderer.invoke('readFileContent', filePath)
   }
 }
 

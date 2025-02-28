@@ -19,8 +19,8 @@ const GlobalLayout = () => {
         <Layout>
           <Splitter style={{ height: '100%' }}>
             <Splitter.Panel
-              defaultSize="23%"
-              min="23%"
+              defaultSize="250"
+              min="250"
               max="70%"
               style={{
                 padding: 0,

@@ -24,23 +24,6 @@ export const getGitLog = (repoPath) => {
 }
 
 /**
- * 获取 git diff
- * @param {*} repoPath
- * @returns
- */
-export const getDiff = (repoPath) => {
-  const diff = execSync(`git -C ${repoPath} diff --staged`).toString()
-
-  const detectChangeType = () => {
-    if (diff.includes('+feat:')) return 'feat'
-    if (diff.includes('+fix:')) return 'fix'
-    return 'chore'
-  }
-
-  return detectChangeType(diff)
-}
-
-/**
  * 获取 git 分支
  * @param {*} repoPath
  * @returns
@@ -97,6 +80,23 @@ export const getCurrentRepoStatus = (repoPath) => {
     return 'UP_TO_DATE'
   }
   return 'UNKNOWN'
+}
+
+/**
+ * 获取文件上一次提交的全部内容
+ * @param {*} repoPath
+ * @param {*} filePath
+ * @returns
+ */
+export const getFileLastCommitContent = (repoPath, filePath) => {
+  const content = execSync(`git -C ${repoPath} show HEAD^:${filePath}`).toString()
+  return content
+}
+
+/** 读取文件中的内容 */
+export const readFileContent = (filePath) => {
+  const content = execSync(`cat ${filePath}`).toString()
+  return content
 }
 
 /**
@@ -158,16 +158,12 @@ export const fetchGit = (repoPath) => {
   execSync(`git -C ${repoPath} fetch`)
 }
 
-
 /**
  * 设置 git ipc
  */
 const setupGitIPC = () => {
   ipcMain.handle('getGitLog', (event, repoPath) => {
     return getGitLog(repoPath)
-  })
-  ipcMain.handle('getDiff', (event, repoPath) => {
-    return getDiff(repoPath)
   })
   ipcMain.handle('getGitBranch', (event, repoPath) => {
     return getGitBranch(repoPath)
@@ -195,6 +191,12 @@ const setupGitIPC = () => {
   })
   ipcMain.handle('fetchGit', (event, repoPath) => {
     return fetchGit(repoPath)
+  })
+  ipcMain.handle('getFileLastCommitContent', (event, repoPath, filePath) => {
+    return getFileLastCommitContent(repoPath, filePath)
+  })
+  ipcMain.handle('readFileContent', (event, filePath) => {
+    return readFileContent(filePath)
   })
 }
 
