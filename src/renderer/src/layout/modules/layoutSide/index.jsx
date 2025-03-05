@@ -6,44 +6,48 @@ import { useState, useEffect } from 'react'
 const { TextArea } = Input
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  setCurrentRepoFileStatus,
   setCurrentRepoStatusType,
   setCurrentRepoStatusCount,
-  setCurrentFilePath
+  setCurrentFilePath,
+  updateCurrentFilePathAndCurrentRepoFileStatus
 } from '../../../store/gitStore'
 
 const CheckboxGroup = Checkbox.Group
 
 const LayoutSide = () => {
-  const gitStroe = useSelector((state) => state.gitStore)
+  const gitStore = useSelector((state) => state.gitStore)
   const dispatch = useDispatch()
   const [checkedList, setCheckedList] = useState([])
 
   /** check all */
-  const checkAll = gitStroe.currentRepoFileStatus.length === checkedList.length
+  const checkAll = gitStore.currentRepoFileStatus.length === checkedList.length
   const indeterminate =
-    checkedList.length > 0 && checkedList.length < gitStroe.currentRepoFileStatus.length
+    checkedList.length > 0 && checkedList.length < gitStore.currentRepoFileStatus.length
 
   const onChange = (list) => {
     setCheckedList(list)
   }
   const onCheckAllChange = (e) => {
-    setCheckedList(e.target.checked ? gitStroe.currentRepoFileStatus : [])
+    setCheckedList(e.target.checked ? gitStore.currentRepoFileStatus : [])
   }
 
-  /** get current repo status */
   const getCurrentRepoFileStatus = async () => {
-    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
-    const status = await window.api.getCurrentRepoFileStatus(currentItem.path)
-    dispatch(setCurrentRepoFileStatus(status))
+    const [status] = await dispatch(updateCurrentFilePathAndCurrentRepoFileStatus())
     setCheckedList(status)
   }
   useEffect(() => {
-    if (gitStroe.repoPaths.length > 0) {
+    if (gitStore.repoPaths.length > 0) {
       getCurrentRepoFileStatus()
     }
-  }, [gitStroe.repoPaths])
+  }, [gitStore.repoPaths])
 
+  useEffect(() => {
+    window.api.onWindowFocus(() => {
+      if (gitStore.repoPaths.length > 0) {
+        getCurrentRepoFileStatus()
+      }
+    })
+  }, [])
   /** get git user info */
   const [gitUserInfo, setGitUserInfo] = useState({})
   const getGitUserInfo = async () => {
@@ -68,7 +72,7 @@ const LayoutSide = () => {
 
   /** commit */
   const onCommit = async () => {
-    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
+    const currentItem = gitStore.repoPaths.find((item) => item.name === gitStore.currentRepo)
     await window.api.commitGit(currentItem.path, checkedList, summary, desc)
     getCurrentRepoFileStatus()
     clearCommit()
@@ -76,7 +80,7 @@ const LayoutSide = () => {
   }
 
   const onCheckAndChangeRepoStatus = async () => {
-    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
+    const currentItem = gitStore.repoPaths.find((item) => item.name === gitStore.currentRepo)
     const res = await window.api.getCurrentRepoStatus(currentItem.path)
     dispatch(setCurrentRepoStatusType(res))
     const count = await window.api.getCurrentRepoStatusCount(currentItem.path, res)
@@ -91,6 +95,7 @@ const LayoutSide = () => {
   const onFileClick = (item) => {
     dispatch(setCurrentFilePath(item))
   }
+
   return (
     <Sider width="100%" style={{ height: '100%' }}>
       <div className={styles['side__main']}>
@@ -101,19 +106,19 @@ const LayoutSide = () => {
             checked={checkAll}
             className={styles['side__main__headerGroup__header']}
           >
-            {gitStroe.currentRepoFileStatus.length} changed files
+            {gitStore.currentRepoFileStatus.length} changed files
           </Checkbox>
           <CheckboxGroup
             value={checkedList}
             onChange={onChange}
             className={styles['side__main__headerGroup__checkboxGroup']}
           >
-            {gitStroe.currentRepoFileStatus.map((item) => (
+            {gitStore.currentRepoFileStatus.map((item) => (
               <div
                 className={styles['side__main__headerGroup__checkboxGroup__item']}
                 key={item}
                 style={{
-                  backgroundColor: gitStroe?.currentFilePath === item ? '#1b1c1e' : 'transparent'
+                  backgroundColor: gitStore?.currentFilePath === item ? '#1b1c1e' : 'transparent'
                 }}
                 onClick={() => onFileClick(item)}
               >

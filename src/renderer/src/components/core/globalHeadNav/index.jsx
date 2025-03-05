@@ -4,7 +4,12 @@ import { PlusOutlined, BranchesOutlined } from '@ant-design/icons'
 import { Flex, Tag } from 'antd'
 import { gitStoreLocalforage } from '../../../localStore'
 import { useDispatch, useSelector } from 'react-redux'
-import { initSelectedTag, setRepoPaths, setCurrentRepo } from '../../../store/gitStore'
+import {
+  initSelectedTag,
+  setRepoPaths,
+  setCurrentRepo,
+  updateCurrentFilePathAndCurrentRepoFileStatus
+} from '../../../store/gitStore'
 
 const GlobalHeadNav = () => {
   const dispatch = useDispatch()
@@ -30,6 +35,7 @@ const GlobalHeadNav = () => {
 
   const handleClick = (name) => {
     dispatch(setCurrentRepo(name))
+    dispatch(updateCurrentFilePathAndCurrentRepoFileStatus())
   }
 
   useEffect(() => {

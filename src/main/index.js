@@ -32,6 +32,10 @@ function createWindow() {
     mainWindow.webContents.send('window-resize')
   })
 
+  mainWindow.on('focus', () => {
+    mainWindow.webContents.send('window-focus')
+  })
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }

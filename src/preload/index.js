@@ -41,6 +41,15 @@ const api = {
   },
   readFileContent: (filePath) => {
     return ipcRenderer.invoke('readFileContent', filePath)
+  },
+
+  onWindowFocus: (callback) => {
+    return ipcRenderer.on('window-focus', (event, ...args) => {
+      callback(...args)
+    })
+  },
+  switchBranch: (repoPath, branch) => {
+    return ipcRenderer.invoke('switchBranch', repoPath, branch)
   }
 }
 

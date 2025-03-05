@@ -8,6 +8,7 @@ const gitStore = createSlice({
     repoPaths: [],
     currentRepo: null,
     currentBranch: null,
+    branchRecords: [],
     currentRepoFileStatus: [],
     currentRepoStatusType: 'UNKNOWN',
     currentRepoStatusCount: 0,
@@ -42,6 +43,16 @@ const gitStore = createSlice({
     setCurrentBranch(state, action) {
       state.currentBranch = action.payload
       gitStoreLocalforage.setItem('currentBranch', action.payload)
+    },
+
+    /**
+     * 设置 当前仓库分支记录
+     * @param {*} state
+     * @param {*} action
+     */
+    setBranchRecords(state, action) {
+      state.branchRecords = action.payload
+      gitStoreLocalforage.setItem('branchRecords', action.payload)
     },
 
     /**
@@ -102,7 +113,49 @@ export const initSelectedTag = () => async (dispatch) => {
   dispatch(setCurrentRepo(currentRepo || null))
   dispatch(setRepoPaths(repoPaths || []))
   dispatch(setCurrentBranch(currentBranch || null))
-  dispatch(setCurrentFilePath(currentFilePath || null))
+
+  if (gitStore.currentRepoFileStatus && gitStore.currentRepoFileStatus.length > 0) {
+    dispatch(setCurrentFilePath(currentFilePath || null))
+  }
+}
+
+/**
+ * @description get current repo status
+ * 1、update change file list
+ * 2、update current changed file path
+ * @returns {Array} current file path
+ */
+export const updateCurrentFilePathAndCurrentRepoFileStatus = () => async (dispatch, getState) => {
+  const { gitStore } = getState()
+  const currentItem = gitStore.repoPaths.find((item) => item.name === gitStore.currentRepo)
+  const status = await window.api.getCurrentRepoFileStatus(currentItem.path)
+  dispatch(setCurrentRepoFileStatus(status))
+
+  if (gitStore.currentFilePath) {
+    dispatch(setCurrentFilePath(gitStore.currentFilePath))
+  } else {
+    dispatch(setCurrentFilePath(status[0]))
+  }
+
+  return [status]
+}
+
+/**
+ * @description git branch
+ * @returns {Array} branch records
+ */
+export const initGitBranch = () => async (dispatch, getState) => {
+  const { gitStore } = getState()
+  const currentItem = gitStore.repoPaths.find((item) => item.name === gitStore.currentRepo)
+  const branch = await window.api.getGitBranch(currentItem.path)
+  dispatch(setBranchRecords(branch))
+  if (gitStore.currentBranch) {
+    dispatch(setCurrentBranch(gitStore.currentBranch))
+  } else {
+    dispatch(setCurrentBranch(branch[0]))
+  }
+
+  return [branch]
 }
 
 export const {
@@ -112,6 +165,7 @@ export const {
   setCurrentRepoFileStatus,
   setCurrentRepoStatusType,
   setCurrentRepoStatusCount,
-  setCurrentFilePath
+  setCurrentFilePath,
+  setBranchRecords
 } = gitStore.actions
 export default gitStore.reducer

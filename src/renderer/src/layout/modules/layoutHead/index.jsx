@@ -8,16 +8,19 @@ import {
   CloudUploadOutlined,
   CloudDownloadOutlined
 } from '@ant-design/icons'
-import { Dropdown, Space, Badge } from 'antd'
+import { Dropdown, Space, Badge, Tag } from 'antd'
 const { Header } = Layout
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   setCurrentRepo,
   setCurrentBranch,
   setCurrentRepoStatusType,
-  setCurrentRepoStatusCount
+  setCurrentRepoStatusCount,
+  updateCurrentFilePathAndCurrentRepoFileStatus,
+  initGitBranch
 } from '../../../store/gitStore'
+import GlobalModal from '../../../components/core/GlobalModal'
 
 const GlobalHead = () => {
   const dispatch = useDispatch()
@@ -26,8 +29,7 @@ const GlobalHead = () => {
   /** get git branch */
   const [branchRecords, setBranchRecords] = useState('')
   const getGitBranch = async () => {
-    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
-    const branch = await window.api.getGitBranch(currentItem.path)
+    const [branch] = await dispatch(initGitBranch())
     setBranchRecords(
       branch.map((item) => {
         return {
@@ -47,7 +49,7 @@ const GlobalHead = () => {
     if (gitStroe.repoPaths.length > 0) {
       getGitBranch()
     }
-  }, [gitStroe.repoPaths])
+  }, [gitStroe.currentRepo])
 
   /** get current branch And current repo status */
   const getCurrentBranch = async () => {
@@ -62,14 +64,46 @@ const GlobalHead = () => {
     dispatch(setCurrentRepoStatusCount(count))
   }
 
-  const changeBranch = ({ key }) => {
-    dispatch(setCurrentBranch(key))
+  /** change branch */
+  const modalRef = useRef(null)
+  const [switchBranchErrorMap, setSwitchBranchErrorMap] = useState([
+    {
+      key: '1',
+      title: 'Bring my changes to feat/head',
+      description: 'Your in-progress work will follow you to the new branch'
+    },
+    {
+      key: '2',
+      title: 'Leave my changes on main',
+      description: 'Your in-progress work will be stashed on this branch for you to return to later'
+    }
+  ])
+  const [selectedTags, setSelectedTags] = useState('1')
+  const handleChange = (key, checked) => {
+    setSelectedTags(checked ? key : '')
   }
+  const changeBranch = async ({ key }) => {
+    const currentItem = gitStroe.repoPaths.find((item) => item.name === gitStroe.currentRepo)
+    const error = await window.api.switchBranch(currentItem.path, key)
+    if (error) {
+      console.log('error', error)
+      modalRef.current.open()
+    } else {
+      dispatch(setCurrentBranch(key))
+    }
+  }
+
   useEffect(() => {
     if (gitStroe.repoPaths.length > 0) {
       getCurrentBranch()
     }
-  }, [gitStroe.repoPaths])
+  }, [gitStroe.currentRepo])
+
+  window.api.onWindowFocus(() => {
+    if (gitStroe.repoPaths.length > 0) {
+      getCurrentBranch()
+    }
+  })
 
   /** Repository &&  Current Repository*/
   const [repositoryRecords, setRepositoryRecords] = useState([])
@@ -85,10 +119,11 @@ const GlobalHead = () => {
   }
   useEffect(() => {
     getRepoPaths()
-  }, [gitStroe.repoPaths])
+  }, [gitStroe.currentRepo])
 
   const changeRepository = (e) => {
     dispatch(setCurrentRepo(e.key))
+    dispatch(updateCurrentFilePathAndCurrentRepoFileStatus())
   }
 
   const onClickHandler = async () => {
@@ -114,7 +149,8 @@ const GlobalHead = () => {
             items: repositoryRecords,
             selectable: true,
             onClick: changeRepository,
-            defaultSelectedKeys: gitStroe.currentRepo,
+            defaultSelectedKeys: [gitStroe.currentRepo],
+            selectedKeys: [gitStroe.currentRepo],
             style: {
               maxHeight: '40vh',
               overflowY: 'auto'
@@ -136,7 +172,8 @@ const GlobalHead = () => {
             items: branchRecords,
             onClick: changeBranch,
             selectable: true,
-            defaultSelectedKeys: gitStroe.currentBranch,
+            defaultSelectedKeys: [gitStroe.currentBranch],
+            selectedKeys: [gitStroe.currentBranch],
             style: {
               maxHeight: '40vh',
               overflowY: 'auto'
@@ -183,6 +220,35 @@ const GlobalHead = () => {
           <div className={styles.lastFetch}>Last fetched 24 minutes ago</div>
         </div>
       </div>
+
+      <GlobalModal
+        ref={modalRef}
+        title="Switch branch"
+        onOk={() => {
+          console.log('切换分支')
+        }}
+        okText="Switch Branch"
+      >
+        <div className={styles.modal__title}>
+          You have changes on this branch. What would you like to do with them?
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {switchBranchErrorMap.map((item) => (
+            <Tag.CheckableTag
+              className={styles.tag}
+              key={item.key}
+              checked={selectedTags.includes(item.key)}
+              onChange={(checked) => handleChange(item.key, checked)}
+            >
+              <div className={styles.tag__content}>
+                <div className={styles.tag__content__title}>{item.title}</div>
+                <div className={styles.tag__content__description}>{item.description}</div>
+              </div>
+            </Tag.CheckableTag>
+          ))}
+        </div>
+      </GlobalModal>
     </Header>
   )
 }

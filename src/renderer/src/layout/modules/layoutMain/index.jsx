@@ -5,7 +5,8 @@ const GlobalMain = () => {
   return (
     <Content
       style={{
-        height: '100%'
+        height: '100%',
+        overflow: 'scroll'
       }}
     >
       <Outlet />

@@ -159,6 +159,20 @@ export const fetchGit = (repoPath) => {
 }
 
 /**
+ * 切换分支
+ * @param {*} repoPath
+ * @param {*} branch
+ */
+export const switchBranch = (repoPath, branch) => {
+  try {
+    execSync(`git -C ${repoPath} checkout ${branch}`)
+  } catch (error) {
+    console.log('error', error)
+    return error
+  }
+}
+
+/**
  * 设置 git ipc
  */
 const setupGitIPC = () => {
@@ -197,6 +211,9 @@ const setupGitIPC = () => {
   })
   ipcMain.handle('readFileContent', (event, filePath) => {
     return readFileContent(filePath)
+  })
+  ipcMain.handle('switchBranch', (event, repoPath, branch) => {
+    return switchBranch(repoPath, branch)
   })
 }
 

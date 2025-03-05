@@ -74,3 +74,27 @@
         }
     }
 }
+.modal {
+    &__title {
+        font-size: 13px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+}
+.tag {
+    padding: 10px;
+    box-sizing: border-box;
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        &__title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+        &__description {
+            font-size: 12px;
+        }
+    }
+}
