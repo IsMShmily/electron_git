@@ -1,5 +1,5 @@
-@import './reset.scss';
-@import './variable.scss';
+@import "./reset.scss";
+@import "./variable.scss";
 body {
   background-repeat: no-repeat;
   background-position: center 15px;
@@ -18,9 +18,56 @@ body {
   width: 100%;
   height: calc(100vh - 35px);
 }
+.app-container__empty {
+  width: 40%;
+  height: calc(100vh - 35px);
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  flex-direction: column;
+  padding-bottom: 50px;
+
+  &-title {
+    width: 100%;
+    &-logo {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      &-img {
+        margin-right: 10px;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+      }
+    }
+    &-text {
+      margin: 20px 0 0 10px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #c5c5c5;
+    }
+    p {
+      font-size: 14px;
+      color: #c5c5c5;
+      margin-top: 10px;
+      line-height: 22px;
+    }
+  }
+  &-button {
+    display: flex;
+    align-items: center;
+    margin-top: 10%;
+    width: 100%;
+  }
+}
 
 img {
-  -webkit-user-drag: none; //禁止图片拖动
+  -webkit-user-drag: none; 
 }
 /* Set the scroll bar style */
 ::-webkit-scrollbar {
